@@ -261,7 +261,7 @@
 
   <section class="block">
     <div class="block-head"><span class="block-num">01</span><h2 class="block-title">I tuoi invitati</h2></div>
-    <p class="block-note">Gli adulti fino a 10 anni hanno il menu bambini; il pacchetto adulti è a persona.</p>
+    <p class="block-note">I bambini fino a 10 anni hanno il menu bambini; il pacchetto adulti è a persona.</p>
     <div class="guests-row">
       <div class="num-field">
         <label>Adulti</label>
@@ -323,7 +323,7 @@
   </section>
 
   <div class="disclaimer">
-    <b>Nota</b> — Questo configuratore fornisce una stima indicativa basata sul listino Mensana. Non include eventuali condizioni speciali per date o eventi particolari (es. serate a tema), servizi "da quotare" (fotografo, esclusiva) o consumi extra alla carta. La quota "minimo garantito" per il buffet e lo spazio indicato sono orientativi e vanno confermati con l'amministrazione in base alla disponibilità. Il preventivo definitivo sarà confermato dal team Mensana.
+    <b>Nota</b> — Questo configuratore fornisce una stima indicativa basata sul listino Mensana. Non include eventuali condizioni speciali per date o eventi particolari (es. serate a tema), servizi "da quotare" (fotografo, esclusiva) o consumi extra alla carta. La quota "minimo garantito" per il buffet e lo spazio indicato sono orientativi e vanno confermati con l'amministrazione in base alla disponibilità. Per pacchetti ampi ed eventi infrasettimanali sono previste agevolazioni: ne parliamo insieme. Il preventivo definitivo sarà confermato dal team Mensana.
   </div>
 </div>
 
@@ -343,7 +343,7 @@
 </div>
 
 <div class="print-only print-footer">
-  Preventivo indicativo e provvisorio — non costituisce conferma di prenotazione. Il preventivo definitivo dovrà essere approvato dall'amministrazione Mensana in base alla disponibilità della data.
+  Preventivo indicativo e provvisorio — non costituisce conferma di prenotazione. Il preventivo definitivo dovrà essere approvato dall'amministrazione Mensana in base alla disponibilità della data. Per pacchetti ampi ed eventi infrasettimanali sono previste agevolazioni: ne parliamo insieme.
 </div>
 
 <script>
@@ -682,7 +682,7 @@ function buildPdfContent(){
   doc.setFont('times', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(111, 104, 88);
-  const disclaimer = "Preventivo indicativo e provvisorio — non costituisce conferma di prenotazione. Il preventivo definitivo dovra' essere approvato dall'amministrazione Mensana in base alla disponibilita' della data.";
+  const disclaimer = "Preventivo indicativo e provvisorio — non costituisce conferma di prenotazione. Il preventivo definitivo dovra' essere approvato dall'amministrazione Mensana in base alla disponibilita' della data. Per pacchetti ampi ed eventi infrasettimanali sono previste agevolazioni: ne parliamo insieme.";
   const disclaimerLines = doc.splitTextToSize(disclaimer, pageWidth - margin * 2);
   doc.text(disclaimerLines, margin, y);
 
