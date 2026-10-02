@@ -155,6 +155,28 @@
   .opt-price{white-space:nowrap;font-family:'Lora',serif;font-size:15.5px;color:var(--sea-deep);font-weight:600;}
   .opt-price .u{font-size:11px;font-weight:400;color:#8a8272;margin-left:3px;}
 
+  .date-field input[type=date]{
+    border:1px solid var(--line);border-radius:3px;padding:7px 9px;font-family:'Lora',serif;font-size:16px;
+    background:#fff;color:var(--ink);width:100%;max-width:210px;
+  }
+  .data-row .num-field{min-width:0;}
+  .data-row .date-field{flex:1 1 200px;}
+  .data-row .momento-field{flex:2 1 300px;}
+  .turno{display:flex;flex-wrap:wrap;gap:6px;}
+  .num-field .turno label.pill{
+    min-height:0;flex:1 1 auto;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;
+    border:1px solid var(--line);border-radius:20px;padding:8px 10px;font-size:13.5px;line-height:1.2;
+    text-transform:none;letter-spacing:0;color:var(--ink);white-space:nowrap;box-sizing:border-box;background:#fff;
+  }
+  .num-field .turno label.pill.on{border-color:var(--terracotta);box-shadow:inset 0 0 0 1px var(--terracotta);color:var(--terracotta-dark);}
+  .turno input{accent-color:var(--terracotta);margin:0;width:15px;height:15px;flex-shrink:0;}
+  .turno-hint{font-size:12.5px;color:#7a7263;font-style:italic;min-height:1.2em;}
+  .feriale-note{
+    margin:10px 0 0 34px;padding:10px 14px;border:1px solid var(--line);border-left:3px solid var(--terracotta);
+    background:#fff;border-radius:3px;font-size:13.5px;color:var(--ink);line-height:1.45;
+  }
+  .feriale-note.ok{border-left-color:var(--sea-deep);}
+  .opt-price .was{display:block;font-size:11.5px;font-weight:400;color:#8a8272;text-align:right;margin-top:1px;}
   .radio-hint{font-size:12px;color:#a89f8c;margin:2px 0 8px 34px;font-style:italic;}
 
   /* summary sidebar-ish, sticky footer bar */
@@ -222,7 +244,7 @@
 
   @media (max-width:600px){
     h1.brand{font-size:34px;}
-    .block-note, .guests-row, .opt-list, .radio-hint{margin-left:0;}
+    .block-note, .guests-row, .opt-list, .radio-hint, .feriale-note{margin-left:0;}
     .opt{padding:12px 10px;}
     .summary-total{font-size:27px;}
   }
@@ -260,7 +282,28 @@
 <div class="wrap">
 
   <section class="block">
-    <div class="block-head"><span class="block-num">01</span><h2 class="block-title">I tuoi invitati</h2></div>
+    <div class="block-head"><span class="block-num">01</span><h2 class="block-title">La data</h2></div>
+    <p class="block-note">Il giorno è facoltativo: se lo indichi, il preventivo applica già il prezzo di quella data.</p>
+    <div class="guests-row data-row">
+      <div class="num-field date-field">
+        <label for="dataEvento">Giorno dell’evento</label>
+        <input type="date" id="dataEvento">
+      </div>
+      <div class="num-field momento-field">
+        <label>Momento</label>
+        <div class="turno">
+          <label class="pill" id="turno-pranzo"><input type="radio" name="turno" value="pranzo"><span>Pranzo</span></label>
+          <label class="pill" id="turno-cena"><input type="radio" name="turno" value="cena" checked><span>Cena</span></label>
+          <label class="pill" id="turno-dopocena"><input type="radio" name="turno" value="dopocena"><span>Dopocena</span></label>
+        </div>
+        <div class="turno-hint" id="turno-hint"></div>
+      </div>
+    </div>
+    <div class="feriale-note" id="data-note"></div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><span class="block-num">02</span><h2 class="block-title">I tuoi invitati</h2></div>
     <p class="block-note">I bambini fino a 10 anni hanno il menu bambini; il pacchetto adulti è a persona.</p>
     <div class="guests-row">
       <div class="num-field">
@@ -282,15 +325,9 @@
     </div>
   </section>
 
-  <section class="block">
-    <div class="block-head"><span class="block-num">02</span><h2 class="block-title">Tipo di evento</h2></div>
-    <p class="block-note">Con il catering completo o solo per il dopocena (bar e intrattenimento, senza cena).</p>
-    <div class="opt-list" id="eventtype-list"></div>
-  </section>
-
   <section class="block" id="section-servizio">
     <div class="block-head"><span class="block-num">03</span><h2 class="block-title">Formula di servizio</h2></div>
-    <div class="radio-hint">Scegli come viene servita la cena</div>
+    <div class="radio-hint">Scegli come viene servito il pasto</div>
     <div class="opt-list" id="service-list"></div>
     <p class="block-note" id="buffet-note" style="display:none;margin-top:12px;">Indica il numero di invitati per vedere lo spazio indicativo e l'eventuale quota minimo garantito.</p>
   </section>
@@ -300,6 +337,7 @@
     <p class="block-note">Tutti i menu includono coperto, acqua e 1 bottiglia di vino ogni 4 persone. Prezzo a persona (adulti).</p>
     <div class="radio-hint">Scegli una formula</div>
     <div class="opt-list" id="menu-list"></div>
+    <div class="feriale-note" id="menu-note"></div>
   </section>
 
   <section class="block" id="section-cake">
@@ -323,7 +361,7 @@
   </section>
 
   <div class="disclaimer">
-    <b>Nota</b> — Questo configuratore fornisce una stima indicativa basata sul listino Mensana. Non include eventuali condizioni speciali per date o eventi particolari (es. serate a tema), servizi "da quotare" (fotografo, esclusiva) o consumi extra alla carta. La quota "minimo garantito" per il buffet e lo spazio indicato sono orientativi e vanno confermati con l'amministrazione in base alla disponibilità. Per pacchetti ampi ed eventi infrasettimanali sono previste agevolazioni: ne parliamo insieme. Il preventivo definitivo sarà confermato dal team Mensana.
+    <b>Nota</b> — Questo configuratore fornisce una stima indicativa basata sul listino Mensana. Non include eventuali condizioni speciali per date o eventi particolari (es. serate a tema), servizi "da quotare" (fotografo, esclusiva) o consumi extra alla carta. La quota "minimo garantito" per il buffet e lo spazio indicato sono orientativi e vanno confermati con l'amministrazione in base alla disponibilità. Dal lunedì al venerdì e la domenica sera ogni formula di menu costa 5 euro in meno a persona, festivi esclusi: se indichi la data, il totale ne tiene già conto. Per i gruppi oltre i 50 ospiti che aggiungono più servizi extra possiamo riservare condizioni particolari: ne parliamo insieme. Il preventivo definitivo sarà confermato dal team Mensana.
   </div>
 </div>
 
@@ -343,26 +381,25 @@
 </div>
 
 <div class="print-only print-footer">
-  Preventivo indicativo e provvisorio — non costituisce conferma di prenotazione. Il preventivo definitivo dovrà essere approvato dall'amministrazione Mensana in base alla disponibilità della data. Per pacchetti ampi ed eventi infrasettimanali sono previste agevolazioni: ne parliamo insieme.
+  Preventivo indicativo e provvisorio — non costituisce conferma di prenotazione. Il preventivo definitivo dovrà essere approvato dall'amministrazione Mensana in base alla disponibilità della data. Per i gruppi oltre i 50 ospiti che aggiungono più servizi extra possiamo riservare condizioni particolari: ne parliamo insieme.
 </div>
 
 <script>
-const eventTypeOptions = [
-  {id:'cena', name:'Cena', price:0, unit:'', desc:'Evento completo con menu, torta e dolce come da formule Mensana.'},
-  {id:'dopocena', name:'Dopocena', price:0, unit:'', desc:'Nessun menu cibo: solo bar, musica ed eventuale scenografia — ideale per feste serali senza cena.'},
-];
-
 const serviceOptions = [
   {id:'servito', name:'Servito al tavolo', price:0, unit:'', desc:'Formula classica: si paga in base al numero reale di invitati, nessuna quota aggiuntiva.'},
   {id:'buffet', name:'Buffet', price:0, unit:'', desc:'Prevede una quota "minimo garantito" quando il numero di invitati è inferiore alla capienza della sala assegnata — vedi il dettaglio qui sotto.'},
 ];
 
 const buffetTiers = [
-  {cap:25, elasticMax:28, label:'una parte della nostra sala interna'},
-  {cap:50, label:'tutta una nostra sala'},
-  {cap:80, label:'tutta la parte interna'},
+  {cap:30, label:'una parte della nostra sala interna'},
+  {cap:55, label:'tutta la sala bar interna'},
+  {cap:60, label:'tutto il patio'},
+  {cap:80, label:'tutta la parte interna, compresa la Sala degli Archi'},
   {cap:130, label:'tutto il locale'},
 ];
+// Quota "minimo garantito" del buffet: posti mancanti alla capienza x questa cifra
+const QUOTA_BUFFET_FERIALE = 25;   // dal lunedì al venerdì e la domenica sera
+const QUOTA_BUFFET_PIENA = 30;     // sabato, domenica a pranzo e festivi
 
 function getBuffetTier(guests){
   for (const t of buffetTiers) {
@@ -372,9 +409,9 @@ function getBuffetTier(guests){
 }
 
 const menuOptions = [
-  {id:'completa', name:'L’Esperienza Completa', tag:'Consigliata', price:45, desc:'Antipasti + 2 Primi + Secondo + Contorno'},
-  {id:'classico', name:'Il Grande Classico', tag:'La più richiesta', price:40, desc:'Antipasti + 1 Primo + Secondo + Contorno'},
-  {id:'light', name:'I Menu Light', tag:null, price:35, desc:'Antipasti + 2 Primi oppure Antipasti + Secondo + Contorno'},
+  {id:'completa', name:'L’Esperienza Completa', tag:'Consigliata', price:50, desc:'Antipasti + 2 Primi + Secondo + Contorno'},
+  {id:'classico', name:'Il Grande Classico', tag:'La più richiesta', price:45, desc:'Antipasti + 1 Primo + Secondo + Contorno'},
+  {id:'light', name:'I Menu Light', tag:null, price:40, desc:'Antipasti + 2 Primi oppure Antipasti + Secondo + Contorno'},
 ];
 
 const cakeOptions = [
@@ -386,7 +423,7 @@ const cakeOptions = [
 ];
 
 const barOptions = [
-  {id:'openwine', name:'Open Wine', price:18, unit:'a persona', desc:'Vino bianco e rosso della casa illimitato per tutta la serata.'},
+  {id:'openwine', name:'Open Wine', price:10, unit:'a persona', desc:'Vino bianco e rosso della casa illimitato per tutta la serata.'},
   {id:'openbar', name:'Open Bar Completo', price:28, unit:'a persona', desc:'Wine Bar illimitato più Cocktail Bar completo con cocktail d’autore.'},
   {id:'openbarfrutta', name:'Open Bar & Buffet di frutta', price:33, unit:'a persona', desc:'Open Bar Completo con l’aggiunta del buffet di frutta fresca.'},
 ];
@@ -394,20 +431,65 @@ const barOptions = [
 const extraOptions = [
   {id:'dj', name:'DJ Set · Piano Bar · Karaoke', price:350, unit:'a servizio', flat:true, desc:'Intrattenimento con impianto audio professionale e pratiche SIAE incluse.'},
   {id:'pizzica', name:'Ballerine di Pizzica e Taranta', price:500, unit:'a spettacolo', flat:true, desc:'Spettacolo con le ballerine guidate dalla maestra Azzurra.'},
-  {id:'scenografia', name:'Scenografia visiva', price:11, unit:'a persona (da)', desc:'Inviti, menu stampati, centrotavola, bomboniere e palloncini.'},
+  {id:'scenografia', name:'Scenografia visiva', price:150, unit:'a servizio (da)', flat:true, desc:'Inviti, menu stampati, centrotavola, bomboniere e palloncini.'},
   {id:'hostess', name:'Hostess & Sicurezza all’ingresso', price:150, unit:'a servizio', flat:true, desc:'Selezione e ordine all’ingresso in caso di esclusiva.'},
 ];
 
 const state = {
   adulti: 0,
   bambini: 0,
-  eventType: 'cena',
+  data: '',
+  turno: 'cena',
   service: 'servito',
   menu: 'classico',
   cake: {},
   bar: null,
   extra: {},
 };
+
+// ---- Prezzo feriale: 5 euro in meno a persona dal lunedì al venerdì e la domenica sera, festivi esclusi
+const RIDUZIONE_FERIALE = 5;
+const FESTIVI_FISSI = ['01-01','01-06','04-25','05-01','06-02','06-29','08-15','10-04','11-01','12-08','12-24','12-25','12-26','12-31'];
+const GIORNI = ['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'];
+const MESI = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+
+function pasqua(y){
+  const a=y%19, b=Math.floor(y/100), c=y%100, d=Math.floor(b/4), e=b%4, f=Math.floor((b+8)/25),
+        g=Math.floor((b-f+1)/3), h=(19*a+b-d-g+15)%30, i=Math.floor(c/4), k=c%4,
+        l=(32+2*e+2*i-h-k)%7, m=Math.floor((a+11*h+22*l)/451),
+        mese=Math.floor((h+l-7*m+114)/31), giorno=((h+l-7*m+114)%31)+1;
+  return new Date(y, mese-1, giorno);
+}
+function leggiData(){
+  if (!state.data) return null;
+  const p = state.data.split('-').map(Number);
+  if (p.length !== 3 || !p[0] || !p[1] || !p[2]) return null;
+  return new Date(p[0], p[1]-1, p[2]);
+}
+function eFestivo(d){
+  const mm = String(d.getMonth()+1).padStart(2,'0'), dd = String(d.getDate()).padStart(2,'0');
+  if (FESTIVI_FISSI.includes(mm+'-'+dd)) return true;
+  const pq = pasqua(d.getFullYear());
+  const lunedi = new Date(pq.getFullYear(), pq.getMonth(), pq.getDate()+1);
+  const uguale = (x,y) => x.getFullYear()===y.getFullYear() && x.getMonth()===y.getMonth() && x.getDate()===y.getDate();
+  return uguale(d,pq) || uguale(d,lunedi);
+}
+// restituisce {scelta, feriale, festivo, etichetta}
+function fasciaData(){
+  const d = leggiData();
+  if (!d) return {scelta:false, feriale:false, festivo:false, etichetta:''};
+  const g = d.getDay();
+  const festivo = eFestivo(d);
+  const feriale = !festivo && ((g >= 1 && g <= 5) || (g === 0 && state.turno !== 'pranzo'));
+  const etichetta = GIORNI[g].charAt(0).toUpperCase() + GIORNI[g].slice(1) + ' ' + d.getDate() + ' ' + MESI[d.getMonth()] + ' ' + d.getFullYear() + ', ' + state.turno;
+  return {scelta:true, feriale, festivo, etichetta};
+}
+function riduzioneMenu(){
+  return fasciaData().feriale ? RIDUZIONE_FERIALE : 0;
+}
+function quotaBuffet(){
+  return fasciaData().feriale ? QUOTA_BUFFET_FERIALE : QUOTA_BUFFET_PIENA;
+}
 
 function euro(n){
   return n.toLocaleString('it-IT', {maximumFractionDigits:0});
@@ -427,7 +509,7 @@ function renderRadioList(container, options, selectedKey, groupName, onSelect, n
           <span class="name">${opt.name}</span>${opt.tag ? `<span class="tag">${opt.tag}</span>` : ''}
           <div class="desc">${opt.desc}</div>
         </div>
-        ${hidePrice ? '' : `<div class="opt-price">€ ${priceLabel}<span class="u">${unitLabel}</span></div>`}
+        ${hidePrice ? '' : `<div class="opt-price">€ ${priceLabel}<span class="u">${unitLabel}</span>${opt.was ? `<span class="was">invece di € ${euro(opt.was)}</span>` : ''}</div>`}
       </div>`;
     row.querySelector('input').addEventListener('change', () => {
       onSelect(nullable && selectedKey === opt.id ? null : opt.id);
@@ -473,16 +555,17 @@ function computeTotal(){
   const guests = state.adulti + state.bambini;
   let total = 0;
   const lines = [];
-  const isCena = state.eventType === 'cena';
+  const isCena = state.turno !== 'dopocena';
   const buffetTag = '';
 
   // Menu (only for "cena")
   if (isCena) {
     const menuOpt = menuOptions.find(m => m.id === state.menu);
     if (menuOpt && state.adulti > 0) {
-      const sub = menuOpt.price * state.adulti;
+      const rid = riduzioneMenu();
+      const sub = (menuOpt.price - rid) * state.adulti;
       total += sub;
-      lines.push({label: `${menuOpt.name} × ${state.adulti} adulti`, value: sub});
+      lines.push({label: `${menuOpt.name}${rid ? ' (prezzo feriale)' : ''} × ${state.adulti} adulti`, value: sub});
     }
     if (state.bambini > 0) {
       const sub = 25 * state.bambini;
@@ -495,9 +578,10 @@ function computeTotal(){
       const tier = getBuffetTier(guests);
       const diff = Math.max(0, tier.cap - guests);
       if (diff > 0) {
-        const sub = diff * 20;
+        const q = quotaBuffet();
+        const sub = diff * q;
         total += sub;
-        lines.push({label: `Quota minimo garantito — spazio indicativo: ${tier.label}, per ${guests} partecipanti minimo garantiti`, value: sub});
+        lines.push({label: `Quota minimo garantito per il buffet (circa) — spazio indicativo: ${tier.label}`, value: sub});
       }
     }
   }
@@ -532,14 +616,48 @@ function computeTotal(){
 }
 
 function render(){
-  renderRadioList(document.getElementById('eventtype-list'), eventTypeOptions, state.eventType, 'eventtype', (v) => state.eventType = v, false, true);
   renderRadioList(document.getElementById('service-list'), serviceOptions, state.service, 'service', (v) => state.service = v, false, true);
-  renderRadioList(document.getElementById('menu-list'), menuOptions, state.menu, 'menu', (v) => state.menu = v, false);
+  const rid = riduzioneMenu();
+  const menuMostrati = menuOptions.map(m => rid ? Object.assign({}, m, {price: m.price - rid, was: m.price}) : m);
+  renderRadioList(document.getElementById('menu-list'), menuMostrati, state.menu, 'menu', (v) => state.menu = v, false);
+
+  // note sulla data
+  const fascia = fasciaData();
+  const REGOLA = 'Dal lunedì al venerdì e la domenica sera ogni formula di menu costa <b>5 euro in meno a persona</b> (festivi esclusi).';
+  const dataNote = document.getElementById('data-note');
+  const menuNote = document.getElementById('menu-note');
+  let testoData, testoMenu, ok = false;
+  if (!fascia.scelta) {
+    testoData = REGOLA;
+    testoMenu = REGOLA + ' Indica la data in alto e il totale ne tiene già conto.';
+  } else if (fascia.feriale) {
+    ok = true;
+    testoData = `<b>${fascia.etichetta}</b> — per questa data vale il prezzo feriale: 5 euro in meno a persona su ogni formula di menu.`;
+    testoMenu = `Prezzo feriale applicato per <b>${fascia.etichetta}</b>: 5 euro in meno a persona su ogni formula.`;
+  } else if (fascia.festivo) {
+    testoData = `<b>${fascia.etichetta}</b> è un giorno festivo: vale il prezzo di listino.`;
+    testoMenu = `Prezzo di listino per <b>${fascia.etichetta}</b> (giorno festivo).`;
+  } else {
+    testoData = `<b>${fascia.etichetta}</b> — prezzo di listino. Se la tua data è flessibile: ` + REGOLA.charAt(0).toLowerCase() + REGOLA.slice(1);
+    testoMenu = `Prezzo di listino per <b>${fascia.etichetta}</b>. ` + REGOLA;
+  }
+  if (state.turno === 'dopocena') {
+    ok = false;
+    testoData = (fascia.scelta ? `<b>${fascia.etichetta}</b> — ` : '') + 'Dopocena, dalle 22:30: nessun menu, scegli più sotto il bar, la musica e la scenografia.';
+  }
+  dataNote.innerHTML = testoData; dataNote.classList.toggle('ok', ok);
+  menuNote.innerHTML = testoMenu; menuNote.classList.toggle('ok', ok);
+  document.getElementById('turno-pranzo').classList.toggle('on', state.turno === 'pranzo');
+  document.getElementById('turno-cena').classList.toggle('on', state.turno === 'cena');
+  document.getElementById('turno-dopocena').classList.toggle('on', state.turno === 'dopocena');
+  document.getElementById('turno-hint').textContent = state.turno === 'dopocena'
+    ? 'Solo bar, musica e scenografia, senza cena.'
+    : 'Evento completo con menu.';
   renderCheckList(document.getElementById('cake-list'), cakeOptions, state.cake, (id, v) => state.cake[id] = v);
   renderRadioList(document.getElementById('bar-list'), barOptions, state.bar, 'bar', (v) => state.bar = v, true);
   renderCheckList(document.getElementById('extra-list'), extraOptions, state.extra, (id, v) => state.extra[id] = v);
 
-  const isCena = state.eventType === 'cena';
+  const isCena = state.turno !== 'dopocena';
   document.getElementById('section-servizio').style.display = isCena ? '' : 'none';
   document.getElementById('section-menu').style.display = isCena ? '' : 'none';
   document.getElementById('buffet-note').style.display = (isCena && state.service === 'buffet') ? '' : 'none';
@@ -549,8 +667,10 @@ function render(){
     if (guests > 0) {
       const tier = getBuffetTier(guests);
       const diff = Math.max(0, tier.cap - guests);
-      const feeText = diff > 0 ? `per ${guests} partecipanti minimo garantiti, la differenza da pagare per il buffet è di € ${euro(diff * 20)}` : `per ${guests} partecipanti minimo garantiti, nessuna differenza da pagare`;
-      noteEl.innerHTML = `Spazio indicativo: <b>${tier.label}</b> (fino a ${tier.cap} persone) — ${feeText}. Da confermare con l'amministrazione in base alla disponibilità.`;
+      const q = quotaBuffet();
+      const quando = (fasciaData().scelta || diff === 0) ? '' : ' Dal lunedì al venerdì e la domenica sera la quota è più bassa: indica la data in alto per vederla.';
+      const feeText = diff > 0 ? `per ${guests} partecipanti la quota da aggiungere per il buffet è di circa € ${euro(diff * q)}` : `per ${guests} partecipanti nessuna quota da aggiungere`;
+      noteEl.innerHTML = `Spazio indicativo: <b>${tier.label}</b> (fino a ${tier.cap} persone) — ${feeText}.${quando} Da confermare con l'amministrazione in base alla disponibilità.`;
     } else {
       noteEl.textContent = 'Indica il numero di invitati qui sopra per vedere lo spazio indicativo e l\'eventuale quota minimo garantito.';
     }
@@ -597,6 +717,12 @@ document.querySelectorAll('.num-field button').forEach(btn => {
   });
 });
 
+document.getElementById('dataEvento').addEventListener('input', (e) => { state.data = e.target.value; render(); });
+document.getElementById('dataEvento').addEventListener('change', (e) => { state.data = e.target.value; render(); });
+document.querySelectorAll('input[name="turno"]').forEach(r => {
+  r.addEventListener('change', (e) => { if (e.target.checked) { state.turno = e.target.value; render(); } });
+});
+
 document.getElementById('toggleDetail').addEventListener('click', () => {
   const el = document.getElementById('detailList');
   const btn = document.getElementById('toggleDetail');
@@ -637,8 +763,8 @@ function buildPdfContent(){
   doc.line(margin, y, pageWidth - margin, y);
   y += 28;
 
-  const isCena = state.eventType === 'cena';
-  const tipoText = isCena ? `Cena (${state.service === 'buffet' ? 'Buffet' : 'Servito al tavolo'})` : 'Dopocena';
+  const isCena = state.turno !== 'dopocena';
+  const tipoText = isCena ? `${state.turno === 'pranzo' ? 'Pranzo' : 'Cena'} (${state.service === 'buffet' ? 'Buffet' : 'Servito al tavolo'})` : 'Dopocena';
   let invitatiLine = `Invitati: ${state.adulti} adulti`;
   if (state.bambini > 0) invitatiLine += ` + ${state.bambini} bambini`;
   invitatiLine += `   ·   Tipo di evento: ${tipoText}`;
@@ -646,6 +772,13 @@ function buildPdfContent(){
   doc.setFontSize(11.5);
   doc.setTextColor(30, 27, 22);
   doc.text(invitatiLine, margin, y);
+  const dPdf = leggiData();
+  if (dPdf) {
+    y += 16;
+    const f = fasciaData();
+    const gg = String(dPdf.getDate()).padStart(2,'0') + '/' + String(dPdf.getMonth()+1).padStart(2,'0') + '/' + dPdf.getFullYear();
+    doc.text(`Data: ${gg}, ${state.turno}` + (isCena ? `   ·   ${f.feriale ? 'prezzo feriale (5 euro in meno a persona sul menu)' : 'prezzo di listino'}` : ''), margin, y);
+  }
   y += 26;
 
   doc.setFontSize(10.5);
@@ -682,7 +815,7 @@ function buildPdfContent(){
   doc.setFont('times', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(111, 104, 88);
-  const disclaimer = "Preventivo indicativo e provvisorio — non costituisce conferma di prenotazione. Il preventivo definitivo dovra' essere approvato dall'amministrazione Mensana in base alla disponibilita' della data. Per pacchetti ampi ed eventi infrasettimanali sono previste agevolazioni: ne parliamo insieme.";
+  const disclaimer = "Preventivo indicativo e provvisorio — non costituisce conferma di prenotazione. Il preventivo definitivo dovra' essere approvato dall'amministrazione Mensana in base alla disponibilita' della data. Per i gruppi oltre i 50 ospiti che aggiungono piu' servizi extra possiamo riservare condizioni particolari: ne parliamo insieme.";
   const disclaimerLines = doc.splitTextToSize(disclaimer, pageWidth - margin * 2);
   doc.text(disclaimerLines, margin, y);
 
